@@ -8,7 +8,7 @@ export default function SiteHeader () {
     }
 
     const Nav = () => (
-        <nav>
+        <nav className={"sm:block " + (isOpen ? "block" : "hidden")}>
             <div className="px-2 pt-2 border-b border-gray-800">
                 <a href="#" className="block px-3 py-1 rounded font-semibold text-white hover:bg-gray-800">List your property</a>
                 <a href="#" className="mt-1 block px-3 py-1 rounded font-semibold text-white hover:bg-gray-800">Trips</a>
@@ -30,9 +30,10 @@ export default function SiteHeader () {
 
             </div>
         </nav>
-    )
+    );
+
     return (
-        <header className="bg-gray-900">
+        <header className="bg-gray-900 sm:flex">
             <div className="flex justify-between px-4 py-3">
                 <div>
                     {/*Logo*/}
@@ -43,7 +44,7 @@ export default function SiteHeader () {
                     </svg>
                 </div>
                 <div className="flex">
-                    <button onClick={toggle} type="button" className="px-2 text-gray-500 hover:text-white focus:outline-none focus:text-white">
+                    <button onClick={toggle} type="button" className="px-2 text-gray-500 hover:text-white focus:outline-none focus:text-white sm:hidden">
                         {/*Menu*/}
                         <svg className="h-6 w-6 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                             {isOpen ? (
@@ -55,7 +56,7 @@ export default function SiteHeader () {
                     </button>
                 </div>
             </div>
-            {isOpen ? <Nav /> : null}
+            <Nav />
 
 
         </header>
