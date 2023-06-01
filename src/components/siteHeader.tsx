@@ -1,41 +1,133 @@
-import {useState} from "react";
+import {useState, useEffect, useRef} from "react";
+
+
+
+
 
 export default function SiteHeader () {
-    let [isOpen, setIsOpen] = useState(false)
+    let [isOpen, setIsOpen] = useState(false);
+    let [dropdownOpen, setDropdownOpen] = useState(false);
+
+
+    function DropdownMenu() {
+        const [isDropOpen, setIsDropOpen] = useState(false);
+        const menuRef = useRef(null);
+
+        useEffect(() => {
+            const handleEscape = (event) => {
+                if (event.keyCode === 27) {
+                    setIsDropOpen(false);
+                }
+            };
+
+            const handleClickAway = (event) => {
+                if (menuRef.current && !menuRef.current.contains(event.target)) {
+                    setIsDropOpen(false);
+                }
+            };
+
+            document.addEventListener("keydown", handleEscape);
+            document.addEventListener("click", handleClickAway);
+
+            return () => {
+                document.removeEventListener("keydown", handleEscape);
+                document.removeEventListener("click", handleClickAway);
+            };
+        }, []);
+
+        const handleButtonClick = () => {
+            setIsDropOpen(!isDropOpen);
+            console.log("Button clicked");
+            console.log("isDropOpen: " + isDropOpen);
+        };
+
+        return (
+            <div ref={menuRef}>
+                <button onClick={handleButtonClick}>Open menu</button>
+                {isDropOpen && (
+                    <div >
+                        <ul>
+                            <li>Menu item 1</li>
+                            <li>Menu item 2</li>
+                            <li>Menu item 3</li>
+                        </ul>
+                    </div>
+                )}
+            </div>
+        );
+    }
 
     function toggle(){
         setIsOpen(!isOpen)
     }
 
+    function toggleDropdown(){
+        setDropdownOpen(!dropdownOpen)
+    }
+
     const Nav = () => (
-        <nav className={"sm:flex sm:items-center sm:pr-4" + (isOpen ? " block" : " hidden")}>
-            <div className="px-2 pt-2 border-b border-gray-800 sm:flex sm:border-b-0 sm:py-0 sm:px-0">
-                <a href="#" className="block px-3 py-1 rounded font-semibold text-white hover:bg-gray-800 sm:text-sm sm:px-2">List your property</a>
-                <a href="#" className="mt-1 block px-3 py-1 rounded font-semibold text-white hover:bg-gray-800 sm:mt-0 sm:text-sm sm:px-2 sm:ml-2">Trips</a>
-                <a href="#" className="mt-1 block px-3 py-1 rounded font-semibold text-white hover:bg-gray-800 sm:mt-0 sm:text-sm sm:px-2 sm:ml-2">Messages</a>
+        <nav className={"sm:flex sm:items-center sm:px-4  xl:flex-1 xl:justify-between" + (isOpen ? " block" : " hidden")}>
+
+            {/*Search*/}
+            <div className="hidden xl:block xl:relative xl:w-full xl:max-w-sm">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3">
+                    {/* Search icon */}
+                    <svg className="h-6 w-6 fill-current text-gray-600" viewBox="0 0 24 24" fill="none"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M16.32 14.9l1.1 1.1c.4-.02.83.13 1.14.44l3 3a1.5 1.5 0 0 1-2.12 2.12l-3-3a1.5 1.5 0 0 1-.44-1.14l-1.1-1.1a8 8 0 1 1 1.41-1.41l.01-.01zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"/>
+                    </svg>
+                </div>
+                <input
+                    className="w-full block bg-gray-200 border border-transparent focus:outline-none focus:bg-gray-100 focus:border-gray-400 text-gray-900 rounded-lg pl-10 pr-3 py-2"
+                    placeholder="Search by keywords"/>
             </div>
 
-            <div className="px-5 py-5 sm:ml-4 sm:py-0 sm:px-4">
-
-                {/*Profile picture and name*/}
-                <div className="flex items-center">
-                    <img className="h-10 w-10 object-cover rounded-full border-2 border-gray-600 sm:h-8 sm:w-8" src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&q=80" alt="profile photo"/>
-                    <span className="ml-4 text-gray-200 font-semibold sm:hidden">Isla Schoger</span>
+            {/*Menu items*/}
+            <div className="sm:flex sm:items-center">
+                <div className="px-2 pt-2 border-b border-gray-800 sm:flex sm:border-b-0 sm:py-0 sm:px-0">
+                    <a href="#"
+                       className="block px-3 py-1 rounded font-semibold text-white hover:bg-gray-800 sm:text-sm sm:px-2 xl:text-gray-900">List
+                        your property</a>
+                    <a href="#"
+                       className="mt-1 block px-3 py-1 rounded font-semibold text-white hover:bg-gray-800 sm:mt-0 sm:text-sm sm:px-2 sm:ml-2 xl:text-gray-900">Trips</a>
+                    <a href="#"
+                       className="mt-1 block px-3 py-1 rounded font-semibold text-white hover:bg-gray-800 sm:mt-0 sm:text-sm sm:px-2 sm:ml-2 xl:text-gray-900">Messages</a>
                 </div>
 
-                <div className="mt-5 sm:hidden">
-                    <a href="#" className="block text-gray-400 hover:text-white">Account settings</a>
-                    <a href="#" className="mt-3 block text-gray-400 hover:text-white">Support</a>
-                    <a href="#" className="mt-3 block text-gray-400 hover:text-white">Sign out</a>
-                </div>
+                <div className="relative px-5 py-5 sm:ml-4 sm:py-0 sm:px-4">
 
+                    {/*Profile picture and name*/}
+                    {/*For small screens*/}
+                    <div className="flex items-center sm:hidden">
+                        <img
+                            className="h-10 w-10 object-cover rounded-full border-2 border-gray-600"
+                            src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&q=80"
+                            alt="profile photo"/>
+                        <span className="ml-4 text-gray-200 font-semibold">Isla Schoger</span>
+                    </div>
+
+                    {/*For larger screens (with dropdown trigger)*/}
+                    <button type="button" onClick={toggleDropdown} className="flex items-center rounded-full hidden sm:block sm:h-8 sm:w-8 focus:outline-none  sm:overflow-hidden sm:border-2 border-gray-600 focus:border-white xl:border-gray-300">
+                        <img
+                            className="h-full w-full object-cover"
+                            src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&q=80"
+                            alt="profile photo"/>
+                    </button>
+
+                    <div className={`mt-5 sm:mt-3  sm:bg-white sm:rounded-lg sm:absolute sm:right-0 sm:w-48 sm:py-2 sm:shadow-xl sm:z-10 ${dropdownOpen ? "sm:block" : "sm:hidden"}`}>
+                        <a href="#" className="block text-gray-400 hover:text-white sm:mt-0 sm:text-gray-800 sm:px-4 sm:py-2 sm:hover:bg-indigo-500">Account settings</a>
+                        <a href="#" className="mt-3 block text-gray-400 hover:text-white sm:mt-0 sm:text-gray-800 sm:px-4 sm:py-2 sm:hover:bg-indigo-500">Support</a>
+                        <a href="#" className="mt-3 block text-gray-400 hover:text-white sm:mt-0 sm:text-gray-800 sm:px-4 sm:py-2 sm:hover:bg-indigo-500">Sign out</a>
+                    </div>
+                </div>
             </div>
         </nav>
     );
 
     return (
-        <header className="bg-gray-900 sm:flex sm:items-center sm:justify-between">
-            <div className="flex justify-between px-4 py-3">
+        <header className="bg-gray-900 sm:flex sm:items-center sm:justify-between xl:bg-white">
+            <div className="flex justify-between px-4 py-3 xl:w-72 xl:bg-gray-900 xl:justify-center xl:py-5">
 
                 {/*Logo*/}
                 <div>
@@ -46,9 +138,10 @@ export default function SiteHeader () {
                     </svg>
                 </div>
 
-                <div className="flex">
-                    <button onClick={toggle} type="button" className="px-2 text-gray-500 hover:text-white focus:outline-none focus:text-white sm:hidden">
-                        {/*Menu*/}
+                {/*Menu button*/}
+                <div className="flex sm:hidden">
+                    <button onClick={toggle} type="button" className="px-2 text-gray-500 hover:text-white focus:outline-none focus:text-white">
+                        {/*Menu icon*/}
                         <svg className="h-6 w-6 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                             {isOpen ? (
                                 <path fillRule="evenodd" clipRule="evenodd" d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"/>
@@ -59,9 +152,11 @@ export default function SiteHeader () {
                     </button>
                 </div>
             </div>
+            <DropdownMenu/>
             <Nav />
 
 
         </header>
     );
 }
+

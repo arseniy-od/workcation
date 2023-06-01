@@ -14,7 +14,11 @@ module.exports = {
       },
       padding: {
         '5/6': '83.33%'
-      }
+      },
+      spacing: {
+        '72': '18rem',
+        '80': '20rem',
+      },
     },
   },
   plugins: [require("@tailwindcss/forms")],
