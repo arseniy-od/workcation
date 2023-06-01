@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import Image from "next/image";
 
 import SiteHeader from '@/components/siteHeader'
@@ -16,26 +17,45 @@ export default function Home() {
 
     return (
         <div id="app" className="min-h-screen bg-gray-200 antialiased xl:flex xl:flex-col xl:h-screen">
+            <Head>
+                <title>Workcation</title>
+            </Head>
 
             <SiteHeader />
 
             <div className="xl:flex xl:flex-1 xl:overflow-x-hidden xl:overflow-y-hidden">
                 <SearchFilters/>
 
-                <main className="py-6 xl:flex-1">
-                    <div className="px-4">
-                        <h3 className="text-gray-900 text-xl">Los Angeles</h3>
-                        <p className="text-gray-600">Live like a stars in this luxurious Southern Californian
-                            estates.</p>
-                    </div>
-                    <div className="mt-6 sm:overflow-x-auto ">
-                        <div className="px-4 sm:inline-flex sm:-mx-2 sm:pb-8">
-                            {properties.map((property, i) => <PropertyCard property={property} key={i}/>)}
-
+                <div className="overflow-y-auto xl:flex-1">
+                    <main className="py-6">
+                        <div className="px-4">
+                            <h3 className="text-gray-900 text-xl">Los Angeles</h3>
+                            <p className="text-gray-600">Live like a stars in this luxurious Southern Californian
+                                estates.</p>
                         </div>
-                    </div>
+                        <div className="mt-6 sm:overflow-x-auto ">
+                            <div className="px-4 sm:inline-flex sm:-mx-2 sm:pb-8">
+                                {properties.map((property, i) => <PropertyCard property={property} key={i}/>)}
 
-                </main>
+                            </div>
+                        </div>
+
+                    </main>
+
+                    <main className="py-6">
+                        <div className="px-4">
+                            <h3 className="text-gray-900 text-xl">Phoenix</h3>
+                            <p className="text-gray-600">Escape the cold and enjoy weather without rain</p>
+                        </div>
+                        <div className="mt-6 sm:overflow-x-auto ">
+                            <div className="px-4 sm:inline-flex sm:-mx-2 sm:pb-8">
+                                {properties.map((property, i) => <PropertyCard property={property} key={i}/>)}
+
+                            </div>
+                        </div>
+
+                    </main>
+                </div>
 
             </div>
         </div>

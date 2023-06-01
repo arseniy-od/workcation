@@ -30,7 +30,7 @@ export default function SearchFilters() {
 
     function FiltersForm() {
         return (
-            <form className={"xl:flex xl:flex-col xl:justify-between xl:h-full xl:block" + (isOpen ? " block" : " hidden")}>
+            <form className={"xl:flex xl:flex-col xl:justify-between xl:h-full xl:w-72 xl:block" + (isOpen ? " block" : " hidden")}>
                 <div className="lg:flex xl:block xl:overflow-y-auto">
                     <fieldset className="px-4 py-4 border-t border-gray-900 lg:w-1/3 xl:w-full xl:border-t-0">
                         <div className="flex flex-wrap -mx-2">

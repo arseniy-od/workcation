@@ -1,72 +1,17 @@
 import {useState, useEffect, useRef} from "react";
-
-
-
+import DropdownMenu from "@/components/dropdownMenu";
 
 
 export default function SiteHeader () {
-    let [isOpen, setIsOpen] = useState(false);
-    let [dropdownOpen, setDropdownOpen] = useState(false);
-
-
-    function DropdownMenu() {
-        const [isDropOpen, setIsDropOpen] = useState(false);
-        const menuRef = useRef(null);
-
-        useEffect(() => {
-            const handleEscape = (event) => {
-                if (event.keyCode === 27) {
-                    setIsDropOpen(false);
-                }
-            };
-
-            const handleClickAway = (event) => {
-                if (menuRef.current && !menuRef.current.contains(event.target)) {
-                    setIsDropOpen(false);
-                }
-            };
-
-            document.addEventListener("keydown", handleEscape);
-            document.addEventListener("click", handleClickAway);
-
-            return () => {
-                document.removeEventListener("keydown", handleEscape);
-                document.removeEventListener("click", handleClickAway);
-            };
-        }, []);
-
-        const handleButtonClick = () => {
-            setIsDropOpen(!isDropOpen);
-            console.log("Button clicked");
-            console.log("isDropOpen: " + isDropOpen);
-        };
-
-        return (
-            <div ref={menuRef}>
-                <button onClick={handleButtonClick}>Open menu</button>
-                {isDropOpen && (
-                    <div >
-                        <ul>
-                            <li>Menu item 1</li>
-                            <li>Menu item 2</li>
-                            <li>Menu item 3</li>
-                        </ul>
-                    </div>
-                )}
-            </div>
-        );
-    }
+    let [isMenuOpen, setIsMenuOpen] = useState(false);
 
     function toggle(){
-        setIsOpen(!isOpen)
+        setIsMenuOpen(!isMenuOpen)
     }
 
-    function toggleDropdown(){
-        setDropdownOpen(!dropdownOpen)
-    }
 
     const Nav = () => (
-        <nav className={"sm:flex sm:items-center sm:px-4  xl:flex-1 xl:justify-between" + (isOpen ? " block" : " hidden")}>
+        <nav className={"sm:flex sm:items-center sm:px-4  xl:flex-1 xl:justify-between" + (isMenuOpen ? " block" : " hidden")}>
 
             {/*Search*/}
             <div className="hidden xl:block xl:relative xl:w-full xl:max-w-sm">
@@ -86,13 +31,15 @@ export default function SiteHeader () {
             {/*Menu items*/}
             <div className="sm:flex sm:items-center">
                 <div className="px-2 pt-2 border-b border-gray-800 sm:flex sm:border-b-0 sm:py-0 sm:px-0">
-                    <a href="#"
-                       className="block px-3 py-1 rounded font-semibold text-white hover:bg-gray-800 sm:text-sm sm:px-2 xl:text-gray-900">List
-                        your property</a>
-                    <a href="#"
-                       className="mt-1 block px-3 py-1 rounded font-semibold text-white hover:bg-gray-800 sm:mt-0 sm:text-sm sm:px-2 sm:ml-2 xl:text-gray-900">Trips</a>
-                    <a href="#"
-                       className="mt-1 block px-3 py-1 rounded font-semibold text-white hover:bg-gray-800 sm:mt-0 sm:text-sm sm:px-2 sm:ml-2 xl:text-gray-900">Messages</a>
+                    <a href="#" className="block px-3 py-1 rounded font-semibold text-white hover:bg-gray-800 sm:text-sm sm:px-2 xl:text-gray-900 xl:hover:bg-gray-300">
+                        List your property
+                    </a>
+                    <a href="#" className="mt-1 block px-3 py-1 rounded font-semibold text-white hover:bg-gray-800 sm:mt-0 sm:text-sm sm:px-2 sm:ml-2 xl:text-gray-900 xl:hover:bg-gray-300">
+                        Trips
+                    </a>
+                    <a href="#" className="mt-1 block px-3 py-1 rounded font-semibold text-white hover:bg-gray-800 sm:mt-0 sm:text-sm sm:px-2 sm:ml-2 xl:text-gray-900 xl:hover:bg-gray-300">
+                        Messages
+                    </a>
                 </div>
 
                 <div className="relative px-5 py-5 sm:ml-4 sm:py-0 sm:px-4">
@@ -108,18 +55,7 @@ export default function SiteHeader () {
                     </div>
 
                     {/*For larger screens (with dropdown trigger)*/}
-                    <button type="button" onClick={toggleDropdown} className="flex items-center rounded-full hidden sm:block sm:h-8 sm:w-8 focus:outline-none  sm:overflow-hidden sm:border-2 border-gray-600 focus:border-white xl:border-gray-300">
-                        <img
-                            className="h-full w-full object-cover"
-                            src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&q=80"
-                            alt="profile photo"/>
-                    </button>
-
-                    <div className={`mt-5 sm:mt-3  sm:bg-white sm:rounded-lg sm:absolute sm:right-0 sm:w-48 sm:py-2 sm:shadow-xl sm:z-10 ${dropdownOpen ? "sm:block" : "sm:hidden"}`}>
-                        <a href="#" className="block text-gray-400 hover:text-white sm:mt-0 sm:text-gray-800 sm:px-4 sm:py-2 sm:hover:bg-indigo-500">Account settings</a>
-                        <a href="#" className="mt-3 block text-gray-400 hover:text-white sm:mt-0 sm:text-gray-800 sm:px-4 sm:py-2 sm:hover:bg-indigo-500">Support</a>
-                        <a href="#" className="mt-3 block text-gray-400 hover:text-white sm:mt-0 sm:text-gray-800 sm:px-4 sm:py-2 sm:hover:bg-indigo-500">Sign out</a>
-                    </div>
+                    <DropdownMenu/>
                 </div>
             </div>
         </nav>
@@ -143,7 +79,7 @@ export default function SiteHeader () {
                     <button onClick={toggle} type="button" className="px-2 text-gray-500 hover:text-white focus:outline-none focus:text-white">
                         {/*Menu icon*/}
                         <svg className="h-6 w-6 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            {isOpen ? (
+                            {isMenuOpen ? (
                                 <path fillRule="evenodd" clipRule="evenodd" d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"/>
                             ) : (
                                 <path fillRule="evenodd" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"/>
@@ -152,7 +88,6 @@ export default function SiteHeader () {
                     </button>
                 </div>
             </div>
-            <DropdownMenu/>
             <Nav />
 
 
